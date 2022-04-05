@@ -11,6 +11,8 @@ import java.awt.Font;
 import javax.swing.JTextField;
 import javax.swing.JPasswordField;
 import javax.swing.JButton;
+import javax.swing.ImageIcon;
+import javax.swing.SwingConstants;
 
 public class FrmRegistro extends JFrame {
 
@@ -76,8 +78,12 @@ public class FrmRegistro extends JFrame {
 		passwordField.setBounds(10, 194, 273, 35);
 		contentPane.add(passwordField);
 		
-		JButton btnSave = new JButton("Registrar");
-		btnSave.setBounds(10, 253, 273, 50);
+		ImageIcon iconRegistrar = new ImageIcon("C:\\Users\\navis.service\\eclipse-workspace\\tarea4\\Images\\icons8-join-48.png");
+	
+		JButton btnSave = new JButton("Registrar",iconRegistrar);
+		btnSave.setFont(new Font("Tahoma", Font.BOLD, 16));
+		btnSave.setHorizontalAlignment(SwingConstants.LEFT);
+		btnSave.setBounds(10, 240, 273, 63);
 		contentPane.add(btnSave);
 	}
 

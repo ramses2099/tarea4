@@ -12,11 +12,14 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 
 import java.awt.Font;
+
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JPasswordField;
 import java.awt.event.ActionListener;
 import java.util.Arrays;
 import java.awt.event.ActionEvent;
+import javax.swing.SwingConstants;
 
 public class Login extends JFrame {
 
@@ -46,7 +49,7 @@ public class Login extends JFrame {
 	public Login() {
 		setTitle("Login");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 283, 350);
+		setBounds(100, 100, 283, 411);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
@@ -63,7 +66,10 @@ public class Login extends JFrame {
 		lblTitulo.setBounds(10, 13, 144, 52);
 		contentPane.add(lblTitulo);
 		
-		JButton btnEntrar = new JButton("Entrar");
+		ImageIcon iconEntrar = new ImageIcon("C:\\Users\\navis.service\\eclipse-workspace\\tarea4\\Images\\icons8-key-2-48.png");
+		
+		JButton btnEntrar = new JButton("Entrar",new ImageIcon("C:\\Users\\navis.service\\eclipse-workspace\\tarea4\\Images\\icons8-key-2-48.png"));
+		btnEntrar.setHorizontalAlignment(SwingConstants.LEFT);
 		btnEntrar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				 char[] input = passFContrasena.getPassword();
@@ -85,12 +91,15 @@ public class Login extends JFrame {
 			}
 		});
 		btnEntrar.setFont(new Font("Tahoma", Font.BOLD, 16));
-		btnEntrar.setBounds(10, 212, 247, 37);
+		btnEntrar.setBounds(10, 212, 247, 63);
 		contentPane.add(btnEntrar);
 		
-		JButton btnRegistro = new JButton("Registrar");
+		ImageIcon iconRegistrar = new ImageIcon("C:\\Users\\navis.service\\eclipse-workspace\\tarea4\\Images\\icons8-join-48.png");
+		
+		JButton btnRegistro = new JButton("Registrar",iconRegistrar);
+		btnRegistro.setHorizontalAlignment(SwingConstants.LEFT);
 		btnRegistro.setFont(new Font("Tahoma", Font.BOLD, 16));
-		btnRegistro.setBounds(10, 260, 247, 37);
+		btnRegistro.setBounds(10, 286, 247, 63);
 		contentPane.add(btnRegistro);
 		
 		passFContrasena = new JPasswordField();
