@@ -6,6 +6,11 @@ import java.awt.EventQueue;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
+
+import com.tarea4.model.Usuarios;
+import com.tarea4.repository.Repository;
+import com.tarea4.repository.UserRepository;
+
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 
@@ -14,6 +19,7 @@ import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.sql.SQLException;
 
 import javax.swing.JTextField;
 import javax.swing.JPasswordField;
@@ -25,6 +31,7 @@ import java.awt.event.ActionEvent;
 
 public class FrmRegistro extends JFrame implements MouseListener {
 
+	// fields
 	private JPanel contentPane;
 	private JTextField txtNombre;
 	private JTextField txtApellido;
@@ -32,10 +39,37 @@ public class FrmRegistro extends JFrame implements MouseListener {
 	private JPasswordField passFContrasena;
 	private JPasswordField passFContrasena2;
 
+	// respository
+	private Repository rep = null;
+
+	// propertys
+	public String Nombre() {
+		return txtNombre.getText();
+	}
+
+	//
+	public String Apellido() {
+		return txtApellido.getText();
+	}
+
+	//
+	public String NombreUsuario() {
+		return txtNombreUsuario.getText();
+	}
+
+	//
+	public String Contrasenaa() {
+		return passFContrasena.getText();
+	}
+
 	/**
 	 * Create the frame.
 	 */
 	public FrmRegistro() {
+
+		// respository
+		rep = new UserRepository();
+
 		setTitle("Registro de Usuarios");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 310, 425);
@@ -83,57 +117,66 @@ public class FrmRegistro extends JFrame implements MouseListener {
 		JButton btnSave = new JButton("Registrar", iconRegistrar);
 		btnSave.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				//valida 
+				// valida
 				if (txtNombre.getText().equals("") || txtNombre.getText().equals("Nombre")) {
-					JOptionPane.showMessageDialog(null,
-			                "debe ingresar un nombre ",
-			                "Error Message",
-			                JOptionPane.ERROR_MESSAGE);					
+					JOptionPane.showMessageDialog(null, "debe ingresar un nombre ", "Error Message",
+							JOptionPane.ERROR_MESSAGE);
 					return;
-				}else if (txtApellido.getText().equals("Apellido")) {
-					JOptionPane.showMessageDialog(null,
-			                "debe ingresar un Apellido ",
-			                "Error Message",
-			                JOptionPane.ERROR_MESSAGE);					
+				} else if (txtApellido.getText().equals("") || txtApellido.getText().equals("Apellido")) {
+					JOptionPane.showMessageDialog(null, "debe ingresar un Apellido ", "Error Message",
+							JOptionPane.ERROR_MESSAGE);
 					return;
-				}else if (txtNombreUsuario.getText().equals("")) {
-					JOptionPane.showMessageDialog(null,
-			                "debe ingresar un nombre de usuario ",
-			                "Error Message",
-			                JOptionPane.ERROR_MESSAGE);					
+				} else if (txtNombreUsuario.getText().equals("")
+						|| txtNombreUsuario.getText().equals("Nombre Usuario")) {
+					JOptionPane.showMessageDialog(null, "debe ingresar un nombre de usuario ", "Error Message",
+							JOptionPane.ERROR_MESSAGE);
 					return;
-					
+
 				}
-				
+
 				if (passFContrasena.getText().equals("")) {
-					JOptionPane.showMessageDialog(null,
-			                "debe ingresar una contraseña ",
-			                "Error Message",
-			                JOptionPane.ERROR_MESSAGE);					
+					JOptionPane.showMessageDialog(null, "debe ingresar una contraseña ", "Error Message",
+							JOptionPane.ERROR_MESSAGE);
 					return;
-					
-				} else	if (passFContrasena2.getText().equals("")) {
-					JOptionPane.showMessageDialog(null,
-			                "debe ingresar de confirmar la contraseña ",
-			                "Error Message",
-			                JOptionPane.ERROR_MESSAGE);					
-					
+
+				} else if (passFContrasena2.getText().equals("")) {
+					JOptionPane.showMessageDialog(null, "debe ingresar de confirmar la contraseña ", "Error Message",
+							JOptionPane.ERROR_MESSAGE);
+
 					return;
-				}else {
-					if (passFContrasena.getText() != passFContrasena2.getText()) {
+				} else {
+					if (!passFContrasena.getText().toString().equals(passFContrasena2.getText().toString())) {
 						JOptionPane.showMessageDialog(null,
-				                "la contraseña es diferente a la confirmacion de la contraseña ",
-				                "Error Message",
-				                JOptionPane.ERROR_MESSAGE);					
-						return;		
+								"la contraseña es diferente a la confirmacion de la contraseña ", "Error Message",
+								JOptionPane.ERROR_MESSAGE);
+						return;
 					}
-				
+
 				}
-				
-				
-				
-				
-				
+				// Registrar
+				Usuarios user = new Usuarios();
+				user.setNombre_usuario(NombreUsuario());
+				user.setContrasena_usuario(Contrasenaa());
+				user.setNombre(Nombre());
+				user.setApellido(Apellido());
+
+				try {
+					int n = rep.add(user);
+
+					if (n > 0) {
+						JOptionPane.showMessageDialog(null, "Usuario registrado correctamente ", "Info Message",
+								JOptionPane.INFORMATION_MESSAGE);
+						limpiarFields();
+						Login login = new Login();
+						login.setVisible(true);
+						setVisible(false);
+					}
+
+				} catch (SQLException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+
 			}
 		});
 		btnSave.setFont(new Font("Tahoma", Font.BOLD, 16));
@@ -208,6 +251,14 @@ public class FrmRegistro extends JFrame implements MouseListener {
 			repaint();
 			revalidate();
 		}
+	}
+
+	public void limpiarFields() {
+		txtNombre.setText("Nombre");
+		txtApellido.setText("Apellido");
+		txtNombreUsuario.setText("Nombre Usuario");
+		passFContrasena.setText("");
+		passFContrasena2.setText("");
 	}
 
 }

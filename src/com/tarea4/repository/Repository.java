@@ -8,7 +8,7 @@ import com.tarea4.model.Usuarios;
 public interface Repository {
 
 	public int add(Usuarios user)throws SQLException;
-	public void delete(Usuarios user)throws SQLException;
+	public void delete(int id)throws SQLException;
 	public Usuarios getUsuario(int id)throws SQLException;
 	public List<Usuarios> getUsuarios()throws SQLException;
 	public boolean isValidUser(String userName, String Password)throws SQLException; 

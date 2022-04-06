@@ -6,6 +6,7 @@ public class Usuarios {
 
 	private int id;
 	private String contrasena_usuario;
+	private String nombre_usuario;
 	private String nombre;
 	private String apellido;
 	private String telefono;
@@ -22,12 +23,21 @@ public class Usuarios {
 	public void setId(int id) {
 		this.id = id;
 	}
+	
 	public String getContrasena_usuario() {
 		return contrasena_usuario;
 	}
 	public void setContrasena_usuario(String contrasena_usuario) {
 		this.contrasena_usuario = contrasena_usuario;
 	}
+	
+	public String getNombre_usuario() {
+		return nombre_usuario;
+	}
+	public void setNombre_usuario(String nombre_usuario) {
+		this.nombre_usuario = nombre_usuario;
+	}
+	
 	public String getNombre() {
 		return nombre;
 	}

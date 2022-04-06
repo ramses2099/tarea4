@@ -7,8 +7,16 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 import javax.swing.table.DefaultTableModel;
+
+import com.tarea4.model.Usuarios;
+import com.tarea4.repository.Repository;
+import com.tarea4.repository.UserRepository;
+
 import javax.swing.JLabel;
 import java.awt.Font;
+import java.sql.SQLException;
+import java.util.List;
+
 import javax.swing.JTextField;
 import javax.swing.JPasswordField;
 import javax.swing.ImageIcon;
@@ -16,28 +24,19 @@ import javax.swing.JButton;
 import javax.swing.JTable;
 import javax.swing.JScrollPane;
 import javax.swing.SwingConstants;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
 
 public class FrmUsuariosRegistrado extends JFrame {
 
 	private JPanel contentPane;
 	private JTable tblUsuarios;
 	private DefaultTableModel model;
-
-	/**
-	 * Launch the application.
-	 */
-	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					FrmUsuariosRegistrado frame = new FrmUsuariosRegistrado();
-					frame.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-	}
+	private Object[] row;
+	
+	//respository
+	private Repository rep = null;
+		
 
 	/**
 	 * Create the frame.
@@ -72,6 +71,13 @@ public class FrmUsuariosRegistrado extends JFrame {
 		ImageIcon iconCerrar = new ImageIcon("C:\\Users\\navis.service\\eclipse-workspace\\tarea4\\Images\\icons8-logout-48.png");
 		
 		JButton btnCerrarSeccion = new JButton("CERRAR SECCION",iconCerrar);
+		btnCerrarSeccion.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				Login login = new Login();
+				login.setVisible(true);
+				setVisible(false);
+			}
+		});
 		btnCerrarSeccion.setBounds(434, 282, 205, 50);
 		contentPane.add(btnCerrarSeccion);
 		
@@ -87,10 +93,37 @@ public class FrmUsuariosRegistrado extends JFrame {
 		tblUsuarios = new JTable();
 		model = new DefaultTableModel();
 		Object[] column = {"Nombre","Apellido","Telefono","Email","Usuario"};
-		Object[] row = new Object[0];
+		row = new Object[5];
 		model.setColumnIdentifiers(column);
-		model.setNumRows(1);
-		tblUsuarios.setModel(model);
+		
 		scrollPane.setViewportView(tblUsuarios);
+		
+		//respository
+	    rep = new UserRepository();
+	    
+	    fillGrid();
+	}
+	
+	public void fillGrid() {
+		
+		try {
+			List<Usuarios> usuarios = rep.getUsuarios();
+			for (Usuarios user: usuarios){
+				row[0] = user.getNombre();
+				row[1] = user.getApellido();
+				row[2] = user.getTelefono();
+				row[3] = user.getEmail();
+				row[4] = user.getNombre_usuario();
+				model.addRow(row);
+			}
+			
+			tblUsuarios.setModel(model);
+			
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		
 	}
 }
