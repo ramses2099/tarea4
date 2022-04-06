@@ -89,6 +89,7 @@ public class FrmUsuariosRegistrado extends JFrame {
 		Object[] column = {"Nombre","Apellido","Telefono","Email","Usuario"};
 		Object[] row = new Object[0];
 		model.setColumnIdentifiers(column);
+		model.setNumRows(1);
 		tblUsuarios.setModel(model);
 		scrollPane.setViewportView(tblUsuarios);
 	}

@@ -6,6 +6,10 @@ import java.awt.EventQueue;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
+
+import com.tarea4.repository.Repository;
+import com.tarea4.repository.UserRepository;
+
 import java.awt.GridLayout;
 import javax.swing.JTextField;
 import javax.swing.JLabel;
@@ -17,6 +21,7 @@ import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JPasswordField;
 import java.awt.event.ActionListener;
+import java.sql.SQLException;
 import java.util.Arrays;
 import java.awt.event.ActionEvent;
 import javax.swing.SwingConstants;
@@ -27,6 +32,9 @@ public class Login extends JFrame {
 	private JTextField txtNombreUsuario;
 	private JPasswordField passFContrasena;
 
+	//respository
+	private Repository rep = null;
+	
 	/**
 	 * Launch the application.
 	 */
@@ -42,11 +50,24 @@ public class Login extends JFrame {
 			}
 		});
 	}
+	
+   //propretys
+	public String getUserName() {
+		return this.txtNombreUsuario.getText();
+	}
+	
+	public String getPassword() {
+		return this.passFContrasena.getText();
+	}
+	
 
 	/**
 	 * Create the frame.
 	 */
 	public Login() {
+		//respository
+		rep = new UserRepository();
+		
 		setTitle("Login");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 283, 411);
@@ -72,22 +93,50 @@ public class Login extends JFrame {
 		btnEntrar.setHorizontalAlignment(SwingConstants.LEFT);
 		btnEntrar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				 char[] input = passFContrasena.getPassword();
-			        if (isPasswordCorrect(input)) {
-			            JOptionPane.showMessageDialog(null,
-			                "Success! You typed the right password.");
-			        } else {
-			            JOptionPane.showMessageDialog(null,
-			                "Invalid password. Try again.",
+				//Valida campos UsuerName
+				if(getUserName().length() <= 0) {
+					JOptionPane.showMessageDialog(null,
+							"debe ingresar su usuario y contraseña,\r\n si no está registrado debe registrarse ",
+							"Error Message",
+			                JOptionPane.ERROR_MESSAGE);
+					//limpiar input text
+					limpiarInput();
+					return;
+				}
+				//valida la contrasena				
+				if(getPassword().length() <= 0) {
+					JOptionPane.showMessageDialog(null,
+			                "debe ingresar su usuario y contraseña,\r\n si no está registrado debe registrarse ",
 			                "Error Message",
 			                JOptionPane.ERROR_MESSAGE);
-			        }
-
-			        //Zero out the possible password, for security.
-			        Arrays.fill(input, '0');
-
-			        passFContrasena.selectAll();
-			        
+					//limpiar input text 
+					limpiarInput();
+					return;
+				}
+				
+				
+				try {
+					boolean valida = rep.isValidUser(getUserName(), getPassword());
+					
+					if(valida) {
+						FrmUsuariosRegistrado frame = new FrmUsuariosRegistrado();
+						frame.setVisible(true);
+						setVisible(false);
+					}else {
+						JOptionPane.showMessageDialog(null,
+				                "Usuario y contrasena incorrecto. Intente de nuevo ",
+				                "Error Message",
+				                JOptionPane.ERROR_MESSAGE);
+						//limpiar input text 
+						limpiarInput();
+					}
+					
+				} catch (SQLException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+				
+				
 			}
 		});
 		btnEntrar.setFont(new Font("Tahoma", Font.BOLD, 16));
@@ -97,6 +146,13 @@ public class Login extends JFrame {
 		ImageIcon iconRegistrar = new ImageIcon("C:\\Users\\navis.service\\eclipse-workspace\\tarea4\\Images\\icons8-join-48.png");
 		
 		JButton btnRegistro = new JButton("Registrar",iconRegistrar);
+		btnRegistro.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				FrmRegistro frmResgistro = new FrmRegistro();
+				frmResgistro.setVisible(true);
+				setVisible(false);
+			}
+		});
 		btnRegistro.setHorizontalAlignment(SwingConstants.LEFT);
 		btnRegistro.setFont(new Font("Tahoma", Font.BOLD, 16));
 		btnRegistro.setBounds(10, 286, 247, 63);
@@ -107,19 +163,8 @@ public class Login extends JFrame {
 		contentPane.add(passFContrasena);
 	}
 	
-	private static boolean isPasswordCorrect(char[] input) {
-	    boolean isCorrect = true;
-	    char[] correctPassword = { 'b', 'u', 'g', 'a', 'b', 'o', 'o' };
-
-	    if (input.length != correctPassword.length) {
-	        isCorrect = false;
-	    } else {
-	        isCorrect = Arrays.equals (input, correctPassword);
-	    }
-
-	    //Zero out the password.
-	    Arrays.fill(correctPassword,'0');
-
-	    return isCorrect;
+	private void limpiarInput() {
+		this.txtNombreUsuario.setText("");
+		this.passFContrasena.setText("");		
 	}
 }
